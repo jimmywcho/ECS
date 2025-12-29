@@ -77,6 +77,11 @@ module "ecs" {
       memory = 512
 
       subnet_ids = var.private_subnets
+      force_new_deployment = false
+
+      deployment_controller = {
+        type = "CODE_DEPLOY"
+      }
 
       load_balancer = {
         service = {
