@@ -1,0 +1,9 @@
+version: 0.0
+Resources:
+  - TargetService:
+      Type: AWS::ECS::Service
+      Properties:
+        TaskDefinition: "arn:aws:ecs:us-east-1:$accountID:task-definition/my-app:5"
+        LoadBalancerInfo:
+          ContainerName: "web"
+          ContainerPort: 80
