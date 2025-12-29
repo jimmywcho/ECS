@@ -27,13 +27,28 @@ module "alb" {
       port     = 80
       protocol = "HTTP"
       forward = {
-        target_group_key = "ecs-app"
+        target_group_key = "blue"
       }
     }
   }
 
   target_groups = {
-    ecs-app = {
+    blue = { # blue = old version
+      backend_protocol                  = "HTTP"
+      backend_port                      = 80
+      target_type                       = "ip"
+      health_check: {
+        path                = "/"
+        interval            = 30
+        timeout             = 10
+        healthy_threshold   = 2
+        unhealthy_threshold = 2
+        port = "traffic-port"
+      }
+      create_attachment = false
+    }
+
+    green = { #green = new version
       backend_protocol                  = "HTTP"
       backend_port                      = 80
       target_type                       = "ip"
@@ -65,7 +80,7 @@ module "ecs" {
 
       load_balancer = {
         service = {
-          target_group_arn = module.alb.target_groups["ecs-app"].arn
+          target_group_arn = module.alb.target_groups["blue"].arn
           container_name   = "web"
           container_port   = 80
         }
