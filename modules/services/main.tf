@@ -4,6 +4,8 @@ module "alb" {
   vpc_id  = var.vpc_id
   subnets = var.public_subnets
 
+  enable_deletion_protection = false
+
   security_group_ingress_rules = {
     all_http = {
       from_port   = 80
